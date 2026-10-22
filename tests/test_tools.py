@@ -6,7 +6,7 @@ with .tool and rejects malformed mappings with ValueError.
 import pytest
 from src.tools import parse_request
 
-@pytest.mark.parametrize('request', [
+@pytest.mark.parametrize('tool_request', [
     {'tool':'inspect','scope':'board'},
     {'tool':'inspect','scope':'cell','row':0,'column':1},
     {'tool':'place','row':0,'column':2,'digit':4},
@@ -16,10 +16,10 @@ from src.tools import parse_request
     {'tool':'query','atom':'A'},
     {'tool':'submit'},
 ])
-def test_valid_requests_parse(request):
-    assert parse_request(request).tool == request['tool']
+def test_valid_requests_parse(tool_request):
+    assert parse_request(tool_request).tool == tool_request['tool']
 
-@pytest.mark.parametrize('request', [
+@pytest.mark.parametrize('tool_request', [
     {'tool':'unknown'},
     {'tool':'place','row':True,'column':2,'digit':4},
     {'tool':'place','row':'0','column':2,'digit':4},
@@ -29,6 +29,6 @@ def test_valid_requests_parse(request):
     {'tool':'query','atom':'!A'},
     {'tool':'add_rule','premises':'A','conclusion':'B'},
 ])
-def test_malformed_requests_rejected(request):
+def test_malformed_requests_rejected(tool_request):
     with pytest.raises(ValueError):
-        parse_request(request)
+        parse_request(tool_request)
